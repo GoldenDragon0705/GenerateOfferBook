@@ -1,10 +1,7 @@
-window.addEventListener('DOMContentLoaded', () => {
-  const replaceText = (selector, text) => {
-    const element = document.getElementById(selector)
-    if (element) element.innerText = text
-  }
+const {ipcRenderer, contextBridge} = require('electron');
 
-  for (const type of ['chrome', 'node', 'electron']) {
-    replaceText(`${type}-version`, process.versions[type])
+contextBridge.exposeInMainWorld('MY_APP_NAMESPACE', {
+  openDialog() {
+    ipcRenderer.send('hey-open-my-dialog-now');
   }
-})
+});

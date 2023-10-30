@@ -1,30 +1,40 @@
-const { app, BrowserWindow } = require('electron')
-const path = require('node:path')
+const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron')
+const url = require('url')
+const path = require('path')
 
-function createWindow () {
-  const win = new BrowserWindow({
-    width: 800,
+let win
+
+function createWindow() {
+  win = new BrowserWindow({
+    width: 1000,
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
     }
   })
 
-  win.loadFile('src/index.html')
+  win.loadURL(url.format({
+    pathname: path.join(__dirname, 'src/index.html'),
+    protocol: 'file:',
+    slashes: true
+  }))
+  
+  ipcMain.on('hey-open-my-dialog-now', () => {
+    dialog.showOpenDialog({ properties: ['openFile', 'multiSelections'] })
+  });
 }
 
-app.whenReady().then(() => {
-  createWindow()
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow()
-    }
-  })
-})
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
+const menutemplate = [
+  {
+    label: 'Offerbook',
+    submenu: [
+      {
+        label: 'Create'
+      }
+    ]
   }
-})
+]
+
+const menu = Menu.buildFromTemplate(menutemplate)
+Menu.setApplicationMenu(menu)
+app.on('ready', createWindow)
