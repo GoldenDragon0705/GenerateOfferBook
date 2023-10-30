@@ -1,0 +1,30 @@
+{
+  "name": "genofferbook",
+  "version": "1.0.0",
+  "description": "Generate offer books for marketing",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "keywords": [
+    "electron",
+    "offer"
+  ],
+  "author": "goldendragon9875@gmail.com",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^27.0.2",
+    "electron-builder": "^24.6.4"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.2",
+    "jquery": "^3.7.1"
+  },
+  "build": {
+    "appId": "genofferbook",
+    "win": {
+      "target": "nsis"
+    }
+  }
+}
