@@ -8,6 +8,26 @@ body {
   padding-top: 15px;
 }
 
+@keyframes underline_view {
+  0% {  }
+}
+
+.content-items input.brand-name {
+  width: 100%;
+  outline: 0;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  font-size: 25px;
+  padding: 5px;
+  transition: 0.7s;
+  transition-property: border-bottom;
+  transition-timing-function: ease-in;
+}
+
+.content-items input.brand-name:focus {
+  border-bottom: 3px solid #0d6efd;
+}
+
 .item-block {
   margin-top: 10px;
   margin-bottom: 10px;
