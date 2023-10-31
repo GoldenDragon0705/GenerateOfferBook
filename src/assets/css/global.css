@@ -1,3 +1,27 @@
 body {
   /* background-color: #eee; */
 }
+
+.content-items {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 15px;
+  padding-top: 15px;
+}
+
+.item-block {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.content-items .item-block img {
+  width: 100%;
+}
+
+.item-block .img-container {
+  padding-top: 100%;
+  background-repeat: no-repeat;
+  background-image: url('../items/61VeA-UsG0L.__AC_SY300_SX300_QL70_FMwebp_.webp');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid gray;
+}

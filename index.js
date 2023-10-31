@@ -1,6 +1,7 @@
-const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron')
+const { app, BrowserWindow, Menu, ipcMain, dialog, session } = require('electron')
 const url = require('url')
 const path = require('path')
+
 
 let win
 
