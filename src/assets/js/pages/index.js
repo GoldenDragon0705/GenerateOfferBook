@@ -3,6 +3,9 @@ $(() => {
 
   let selectedBrandName = "";
 
+  let inputNewBrandName = $('#new_brand_name');
+  let btnCreateBrand = $('#btn_create_brand');
+
   try {
     electron.loadFileNames(filenames => {
       // if none selected brand, loading images don't need
@@ -64,20 +67,32 @@ $(() => {
     });
   };
   
-  $('#new_brand_name').on('input', (e) => {
+  inputNewBrandName.on('input', (e) => {
     let value = e.target.value;
-    $('#btn_create_brand').attr('disabled', value.length?false:true);
+    btnCreateBrand.attr('disabled', value.length?false:true);
   });
 
-  $('#btn_create_brand').on("click", (e) => {
+  inputNewBrandName.on("keypress", (e) => {
+    const code = e.keyCode || e.charCode;
+    if(code === 13 && e.target.value.length)  btnCreateBrand.click();
+  });
+
+  btnCreateBrand.on("click", (e) => {
     // get new brand name and validate it
-    let newBrandName = $('#new_brand_name').val();
+    let newBrandName = inputNewBrandName.val();
     if(!newBrandName.length) return;
 
     createBrandContainer(newBrandName);
     // delete value of new brand name input and close this dialog
-    $('#new_brand_name').val('');
+    inputNewBrandName.val('');
+    btnCreateBrand.attr('disabled', true);
     $(e.target).parent().find('button[data-bs-dismiss]').click();
+  });
+
+  $('button[data-bs-target="#create-new-brand"]').on("click", () => {
+    setTimeout(() => {
+      inputNewBrandName.focus();
+    }, 500)
   });
 });
 
