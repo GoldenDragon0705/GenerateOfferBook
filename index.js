@@ -18,9 +18,11 @@ function createWindow() {
     protocol: 'file:',
     slashes: true
   }))
-  
+
   ipcMain.on('hey-open-my-dialog-now', () => {
-    dialog.showOpenDialog({ properties: ['openFile', 'multiSelections'] })
+    dialog.showOpenDialog({ properties: ['openFile', 'multiSelections'] }, filenames => {
+      console.log(filenames);
+    })
   });
 }
 
@@ -30,6 +32,18 @@ const menutemplate = [
     submenu: [
       {
         label: 'Create'
+      },
+      {
+        label: "Save"
+      }, 
+      {
+        label: "Save As"
+      },
+      {
+        label: "Expert",
+        submenu: [{
+          label: "PDF file"
+        }]
       }
     ]
   }
