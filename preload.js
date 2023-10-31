@@ -5,8 +5,8 @@ contextBridge.exposeInMainWorld('electron', {
     const result = ipcRenderer.invoke('dialog', method, config);
     return result;
   },
-  addLoadImages: (callback) => {
-    ipcRenderer.on("image_names", (event, data) => {
+  loadFileNames: (callback) => {
+    ipcRenderer.on("file_names", (event, data) => {
       callback(data);
     });
   }

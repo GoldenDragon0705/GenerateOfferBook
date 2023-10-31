@@ -25,34 +25,39 @@ function createWindow() {
 
   ipcMain.handle('dialog', (event, method, params) => {       
     const filenames = dialog[method](win ,params) || [];
-    console.log(filenames);
-    event.sender.send("image_names", filenames);
+    event.sender.send("file_names", filenames);
   });
 }
 
-// const menutemplate = [
-//   {
-//     label: 'Offerbook',
-//     submenu: [
-//       {
-//         label: 'Create'
-//       },
-//       {
-//         label: "Save"
-//       }, 
-//       {
-//         label: "Save As"
-//       },
-//       {
-//         label: "Expert",
-//         submenu: [{
-//           label: "PDF file"
-//         }]
-//       }
-//     ]
-//   }
-// ]
+const menutemplate = [
+  {
+    label: 'Offerbook',
+    submenu: [
+      {
+        label: 'Create'
+      },
+      {
+        label: "Save"
+      }, 
+      {
+        label: "Save As"
+      },
+      {
+        label: "Expert",
+        submenu: [{
+          label: "PDF file"
+        }]
+      }
+    ]
+  },
+  {
+    label: "Debug",
+    submenu: [{
+      role: "toggleDevTools"
+    }]
+  }
+]
 
-// const menu = Menu.buildFromTemplate(menutemplate)
-// Menu.setApplicationMenu(menu)
+const menu = Menu.buildFromTemplate(menutemplate)
+Menu.setApplicationMenu(menu)
 app.on('ready', createWindow)

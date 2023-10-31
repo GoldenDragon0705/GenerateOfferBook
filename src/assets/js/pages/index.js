@@ -2,7 +2,7 @@ $(() => {
 
   "use strict";
 
-  electron.addLoadImages(filenames => {
+  electron.loadFileNames(filenames => {
     console.log(filenames);
   });
 
