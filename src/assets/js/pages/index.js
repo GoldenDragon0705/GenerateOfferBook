@@ -2,9 +2,12 @@ $(() => {
   "use strict";
 
   let selectedBrandName = "";
+  let selectedOfferId = "";
 
-  let inputNewBrandName = $('#new_brand_name');
-  let btnCreateBrand = $('#btn_create_brand');
+  const inputNewBrandName = $('#new_brand_name');
+  const btnCreateBrand = $('#btn_create_brand');
+  const inputNewOfferName = $('#new_offer_name');
+  const btnCreateOffer = $('#btn_create_offer');
 
   try {
     electron.loadFileNames(filenames => {
@@ -12,7 +15,9 @@ $(() => {
       if(!selectedBrandName || !selectedBrandName.length) return;
 
       if(!filenames.length) return;
-      const itemsContainer = $('#home .content-items[data-brandname="' + selectedBrandName + '"] .row');
+
+      console.log(selectedOfferId);
+      const itemsContainer = $('#' + selectedOfferId + ' .content-items[data-brandname="' + selectedBrandName + '"] .row');
       filenames.forEach(filename => {
         filename = filename.replaceAll("\\", "\/");
         itemsContainer.append('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 item-block">\
@@ -41,7 +46,8 @@ $(() => {
   
 
   const createBrandContainer = (brandName) => {
-    $('.content-items:last').before('<div class="content-items container-fluid" data-brandname="' + brandName + '">\
+    const activeOfferId = $('#offer-contents .tab-pane.active').attr('id');
+    $('#' + activeOfferId + ' .content-items:last').before('<div class="content-items container-fluid" data-brandname="' + brandName + '">\
                                       <div>\
                                         <input type="text" class="brand-name text-center" value="' + brandName + '">\
                                       </div>\
@@ -53,6 +59,7 @@ $(() => {
                                     </div>');
 
     $('.content-items[data-brandname="' + brandName + '"] button.btn_load_images').on("click", function() {
+      selectedOfferId = activeOfferId;
       selectedBrandName = brandName;
       const dialogConfig = {
         title: 'Select image files.',
@@ -66,15 +73,61 @@ $(() => {
       }
     });
   };
+
+  const createOfferContainer = (newOfferName) => {
+    const id = Date.now();
+    $('#offer-tabs').append('<li class="nav-item">\
+                              <a class="nav-link" data-bs-toggle="tab" href="#' + id + '">' + newOfferName + ' *</a>\
+                            </li>');
+
+    $('#offer-contents').append('<div class="tab-pane container-fluid" id="' + id + '" role="tabpanel">\
+                                  <div class="d-flex py-3">\
+                                    <div class="alert alert-success py-1 my-0 flex-grow-1 me-2">\
+                                      <strong>2.</strong> Create new brand.\
+                                    </div>\
+                                    <button class="btn btn-sm btn-primary me-1 btn-offer-save">Save this offer</button>\
+                                    <button class="btn btn-sm btn-danger me-1 btn-offer-pdf">Generate PDF</button>\
+                                    <button class="btn btn-sm btn-secondary btn-offer-close">Close</button>\
+                                  </div>\
+                                  <div class="content-items container-fluid">\
+                                    <div class="d-flex justify-content-center">\
+                                      <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#create-new-brand">Create new brand</button>\
+                                    </div>\
+                                  </div>\
+                                </div>');
+
+    $('button[data-bs-target="#create-new-brand"]').on("click", () => {
+      setTimeout(() => {
+        inputNewBrandName.focus();
+      }, 500)
+    });
+
+    // open this offer by default
+    $('#offer-tabs a.nav-link.active').removeClass("active");
+    $('#offer-tabs a.nav-link[href="#' + id + '"]').addClass("active");
+
+    $('#offer-contents div.tab-pane.active').removeClass("active");
+    $('#' + id + '').addClass("active");
+  };
   
   inputNewBrandName.on('input', (e) => {
     let value = e.target.value;
     btnCreateBrand.attr('disabled', value.length?false:true);
   });
+  
+  inputNewOfferName.on('input', (e) => {
+    let value = e.target.value;
+    btnCreateOffer.attr('disabled', value.length?false:true);
+  });
 
   inputNewBrandName.on("keypress", (e) => {
     const code = e.keyCode || e.charCode;
     if(code === 13 && e.target.value.length)  btnCreateBrand.click();
+  });
+
+  inputNewOfferName.on("keypress", (e) => {
+    const code = e.keyCode || e.charCode;
+    if(code === 13 && e.target.value.length)  btnCreateOffer.click();
   });
 
   btnCreateBrand.on("click", (e) => {
@@ -89,10 +142,29 @@ $(() => {
     $(e.target).parent().find('button[data-bs-dismiss]').click();
   });
 
-  $('button[data-bs-target="#create-new-brand"]').on("click", () => {
+  btnCreateOffer.on("click", (e) => {
+    // get new offer name and validate it
+    let newOfferName = inputNewOfferName.val();
+    if(!newOfferName.length) return;
+
+    createOfferContainer(newOfferName);
+    // delete value of new offer name input and close this dialog
+    inputNewOfferName.val('');
+    btnCreateOffer.attr('disabled', true);
+    $(e.target).parent().find('button[data-bs-dismiss]').click();
+  });
+  
+  $('button[data-bs-target="#create-new-offer"]').on("click", () => {
     setTimeout(() => {
-      inputNewBrandName.focus();
+      inputNewOfferName.focus();
     }, 500)
   });
+
+
+
+  // init functions
+  createOfferContainer("My new offer");
+
+
 });
 
