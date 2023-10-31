@@ -1,9 +1,12 @@
-const {ipcRenderer, contextBridge} = require('electron');
+const { contextBridge, ipcRenderer } = require('electron');
 
-contextBridge.exposeInMainWorld('ATTACHMENT_IMAGES', {
-  async openDialog(callback) {
-    ipcRenderer.send('hey-open-my-dialog-now');
-    ipcRenderer.on("fileData", (event, data) => {
+contextBridge.exposeInMainWorld('electron', {
+  openDialog: (method, config) => {
+    const result = ipcRenderer.invoke('dialog', method, config);
+    return result;
+  },
+  addLoadImages: (callback) => {
+    ipcRenderer.on("image_names", (event, data) => {
       callback(data);
     });
   }

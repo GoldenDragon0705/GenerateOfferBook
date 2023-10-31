@@ -9,8 +9,12 @@ function createWindow() {
     width: 1000,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
+      preload: path.join(__dirname, 'preload.js'),
+      // nodeIntegration: true,
+      // contextIsolation: false,
+      // enableRemoteModule: true,
+      // nodeIntegrationInWorker: true,
+    }   
   })
 
   win.loadURL(url.format({
@@ -19,36 +23,36 @@ function createWindow() {
     slashes: true
   }))
 
-  ipcMain.on('hey-open-my-dialog-now', () => {
-    dialog.showOpenDialog({ properties: ['openFile', 'multiSelections'] }, filenames => {
-      console.log(filenames);
-    })
+  ipcMain.handle('dialog', (event, method, params) => {       
+    const filenames = dialog[method](win ,params) || [];
+    console.log(filenames);
+    event.sender.send("image_names", filenames);
   });
 }
 
-const menutemplate = [
-  {
-    label: 'Offerbook',
-    submenu: [
-      {
-        label: 'Create'
-      },
-      {
-        label: "Save"
-      }, 
-      {
-        label: "Save As"
-      },
-      {
-        label: "Expert",
-        submenu: [{
-          label: "PDF file"
-        }]
-      }
-    ]
-  }
-]
+// const menutemplate = [
+//   {
+//     label: 'Offerbook',
+//     submenu: [
+//       {
+//         label: 'Create'
+//       },
+//       {
+//         label: "Save"
+//       }, 
+//       {
+//         label: "Save As"
+//       },
+//       {
+//         label: "Expert",
+//         submenu: [{
+//           label: "PDF file"
+//         }]
+//       }
+//     ]
+//   }
+// ]
 
-const menu = Menu.buildFromTemplate(menutemplate)
-Menu.setApplicationMenu(menu)
+// const menu = Menu.buildFromTemplate(menutemplate)
+// Menu.setApplicationMenu(menu)
 app.on('ready', createWindow)
