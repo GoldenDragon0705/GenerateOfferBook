@@ -102,22 +102,8 @@ $(() => {
       }, 500)
     });
 
-    $('button[data-bs-target="#create-pdf-preview"]').on("click", (e) => {
-      let offerdata = [];
-      let goods = [];
-      // let brands = $('#' + id + ' [data-brandname]').map((node) => {
-      //   return $(node).attr('data-brandname');
-      // });
-      // console.log(brands);
-      const brands = $('#' + id + ' [data-brandname]').map((index, node) => $(node).attr('data-brandname'));
-      console.log(brands);
-      const nBrands = brands.length;
-      brands.each((index, brand) => {
-        goods = [];
-        $('[data-brandname="' + brand + '"] div.item-block').each((index, node) => {
-          console.log(node);
-        });
-      });
+    $('button[data-bs-target="#create-pdf-preview"]').on("click", () => {
+      PDFUtil().preview(id);
     });
 
     // open this offer by default
