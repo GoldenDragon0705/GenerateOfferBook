@@ -1,13 +1,13 @@
+const inputNewBrandName = $('#new_brand_name');
+const btnCreateBrand = $('#btn_create_brand');
+const inputNewOfferName = $('#new_offer_name');
+const btnCreateOffer = $('#btn_create_offer');
+
 $(() => {
   "use strict";
 
   let selectedBrandName = "";
   let selectedOfferId = "";
-
-  const inputNewBrandName = $('#new_brand_name');
-  const btnCreateBrand = $('#btn_create_brand');
-  const inputNewOfferName = $('#new_offer_name');
-  const btnCreateOffer = $('#btn_create_offer');
 
   try {
     electron.loadFileNames(filenames => {
@@ -25,18 +25,18 @@ $(() => {
                                 </div>\
                                 <div class="form-group">\
                                   <label for="">* Name:</label>\
-                                  <input type="text" class="form-control form-control-sm" placeholder="Ex: Short Shirt">\
+                                  <input type="text" class="form-control form-control-sm" name="name" placeholder="Ex: Short Shirt">\
                                 </div>\
                                 <div class="form-group">\
                                   <label for="">Symbol:</label>\
-                                  <input type="text" class="form-control form-control-sm" placeholder="Ex: M, L, XL, 2XL">\
+                                  <input type="text" class="form-control form-control-sm" name="symbol" placeholder="Ex: M, L, XL, 2XL">\
                                 </div>\
                                 <div class="form-group">\
                                   <label for="">* Price:</label>\
-                                  <input type="text" class="form-control form-control-sm" placeholder="Ex: $ 23.4">\
+                                  <input type="text" class="form-control form-control-sm" name="price" placeholder="Ex: $ 23.4">\
                                 </div>\
                               </div>');
-        itemsContainer.find('.item-block:last .img-container').css('background-image', 'url(' + filename + ')');
+        itemsContainer.find('.item-block:last .img-container').css('background-image', 'url(' + filename + ')').attr('data-imagepath', filename);
       });
     });
   } catch (e) {
@@ -86,7 +86,7 @@ $(() => {
                                       <strong>2.</strong> Create new brand.\
                                     </div>\
                                     <button class="btn btn-sm btn-primary me-1 btn-offer-save">Save this offer</button>\
-                                    <button class="btn btn-sm btn-danger me-1 btn-offer-pdf">Generate PDF</button>\
+                                    <button class="btn btn-sm btn-danger me-1 btn-offer-pdf" data-bs-toggle="modal" data-bs-target="#create-pdf-preview">Generate PDF</button>\
                                     <button class="btn btn-sm btn-secondary btn-offer-close">Close</button>\
                                   </div>\
                                   <div class="content-items container-fluid">\
@@ -100,6 +100,24 @@ $(() => {
       setTimeout(() => {
         inputNewBrandName.focus();
       }, 500)
+    });
+
+    $('button[data-bs-target="#create-pdf-preview"]').on("click", (e) => {
+      let offerdata = [];
+      let goods = [];
+      // let brands = $('#' + id + ' [data-brandname]').map((node) => {
+      //   return $(node).attr('data-brandname');
+      // });
+      // console.log(brands);
+      const brands = $('#' + id + ' [data-brandname]').map((index, node) => $(node).attr('data-brandname'));
+      console.log(brands);
+      const nBrands = brands.length;
+      brands.each((index, brand) => {
+        goods = [];
+        $('[data-brandname="' + brand + '"] div.item-block').each((index, node) => {
+          console.log(node);
+        });
+      });
     });
 
     // open this offer by default
@@ -160,11 +178,10 @@ $(() => {
     }, 500)
   });
 
-
+ 
 
   // init functions
   createOfferContainer("My new offer");
 
 
 });
-
