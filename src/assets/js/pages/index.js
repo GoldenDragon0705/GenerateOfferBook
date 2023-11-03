@@ -172,9 +172,9 @@ $(() => {
                                     <div class="alert alert-success py-1 my-0 flex-grow-1 me-2">\
                                       <strong>2.</strong> Create new brand.\
                                     </div>\
-                                    <button class="btn btn-sm btn-primary me-1 btn-offer-save">Save this offer</button>\
-                                    <button class="btn btn-sm btn-warning me-1 btn-offer-doc" data-bs-toggle="modal" data-bs-target="#create-doc-file">Generate Doc</button>\
-                                    <button class="btn btn-sm btn-danger me-1 btn-offer-pdf">Generate PDF</button>\
+                                    <button class="btn btn-sm btn-primary me-1 btn-offer-doc" data-bs-toggle="modal" data-bs-target="#create-doc-file"><i class="fa fa-file-word-o"></i> Generate Docx</button>\
+                                    <button class="btn btn-sm btn-danger me-1 btn-offer-pdf"><i class="fa fa-file-pdf-o"></i> Generate PDF</button>\
+                                    <button class="btn btn-sm btn-success me-1 btn-offer-save">Save this offer</button>\
                                     <button class="btn btn-sm btn-secondary btn-offer-close">Close</button>\
                                   </div>\
                                   <div class="content-items container-fluid">\
