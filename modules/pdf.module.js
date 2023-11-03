@@ -7,143 +7,150 @@ const PdfModule = () => {
 
   const margin = 10;
 
- 
-
-  const generate = (offername = "Unknown", data = []) => {
+  const generate = (offername = "Unknown", data = [] , filename) => {
     if(!offername) offername = "Unknown";
-    const doc = new jsPDF({
-      orientation: 'p',
-      unit: 'mm',
-      format: 'a4',
-      putOnlyUsedFonts:true,
-      compress: true
-    });
-    let totalPages = 10;
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    const imageCellWidth = pageWidth / 2 - 12;
-    const middleLineY = 18 + pageHeight / 2 - 14;
-    const textRowHeight = (middleLineY - 18 - imageCellWidth) / 3;
-
-    const addImage = (index, imagepath) => {
-      let image = nativeImage.createFromPath(imagepath);
-      let size = image.getSize();
-      const imageBuffer = image.toJPEG(100);
-      const base64Image = imageBuffer.toString('base64');
-      
-      let imageX = 11, imageY = 19;
-      switch(index) {
-        case 1:
-          imageX = pageWidth / 2 + 1;
-          break;
-        case 2:
-          imageY = middleLineY + 1;
-          break;
-        case 3:
-          imageX = pageWidth / 2 + 1;
-          imageY = middleLineY + 1;
-          break;
-      }
-      let imageWidth = imageCellWidth, imageHeight = imageCellWidth;
-      if(size.width > size.height) {
-        imageHeight = size.height * imageCellWidth / size.width;
-        imageY += (imageCellWidth - imageHeight) / 2;
-      } else {
-        imageWidth = size.width * imageCellWidth / size.height;
-        imageX += (imageCellWidth - imageWidth) / 2;
-      }
-      doc.addImage(base64Image, "JPEG", imageX, imageY, imageWidth, imageHeight);       
-    };
-
-    const addAlignCenterText = (index, good) => {
-      const fontSize = 12;
-      doc.setFontSize(fontSize);
-      let x = 11 + imageCellWidth / 2;
-      let y = 19 + imageCellWidth + 7;
-      switch(index) {
-        case 0:
-          doc.text(good.num, x , y, { align: "center"});
-          doc.text(good.symbol, x, y + 15, { align: "center"});
-          doc.text(good.price, x, y + 30, { align: "center"});
-          break;
-        case 1:     
-          doc.text(good.num, x + imageCellWidth, y, { align: "center"});
-          doc.text(good.symbol, x + imageCellWidth , y + 15, { align: "center"});
-          doc.text(good.price, x + imageCellWidth, y + 30, { align: "center"});
-          break;
-        case 2:
-          y = middleLineY + imageCellWidth + 7;          
-          doc.text(good.num, x, y, { align: "center"});
-          doc.text(good.symbol, x , y + 15, { align: "center"});
-          doc.text(good.price, x, y + 30, { align: "center"});
-          break;
-        case 3:
-          y = middleLineY + imageCellWidth + 7;
-          doc.text(good.num, x + imageCellWidth, y, { align: "center"});
-          doc.text(good.symbol, x + imageCellWidth , y + 15, { align: "center"});
-          doc.text(good.price, x + imageCellWidth, y + 30, { align: "center"});
-          break;
-          
-      }
-    }
-
-    data.forEach((brandObj, index) => {
-      const { brand, goods } = brandObj;
-      const nGoods = goods.length;
-      const nPages = Math.ceil(nGoods / 4);
-      const createTime = moment().format("YYYY-MM-DD HH:mm");
-      for(let i = 0 ; i < nPages ; i++) {
-        doc.setFontSize(8);
-        doc.setTextColor("#888");
-        doc.text(offername, 10, 8);
-        doc.text(createTime, pageWidth - 10, 8, {align : "right"});
-        doc.setDrawColor("#888");
-        doc.line(10, 9, pageWidth - 10, 9);
-        // set brand every page
-        doc.setFontSize(18);
-        doc.setTextColor("#0000ff");
-        doc.text(brand, pageWidth / 2, 15, { align: 'center' });
-       
-        doc.rect(10, 18, pageWidth - 20, pageHeight - 28);
-        doc.line(pageWidth / 2, 18,  pageWidth / 2, pageHeight - 10);
-        doc.line(10, middleLineY, pageWidth - 10, middleLineY);
-
-        doc.line(10, 18 + imageCellWidth, pageWidth - 10, 18 + imageCellWidth);
-        doc.line(10, 18 + imageCellWidth + textRowHeight * 1, pageWidth - 10, 18 + imageCellWidth + textRowHeight * 1);
-        doc.line(10, 18 + imageCellWidth + textRowHeight * 2, pageWidth - 10, 18 + imageCellWidth + textRowHeight * 2);
-
-        doc.line(10, middleLineY + imageCellWidth, pageWidth - 10, middleLineY + imageCellWidth);
-        doc.line(10, middleLineY + imageCellWidth + textRowHeight * 1, pageWidth - 10, middleLineY + imageCellWidth + textRowHeight * 1);
-        doc.line(10, middleLineY + imageCellWidth + textRowHeight * 2, pageWidth - 10, middleLineY + imageCellWidth + textRowHeight * 2);
+    let result = false;
+    try {
+      const doc = new jsPDF({
+        orientation: 'p',
+        unit: 'mm',
+        format: 'a4',
+        putOnlyUsedFonts:true,
+        compress: true
+      });
+      let totalPages = 10;
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const imageCellWidth = pageWidth / 2 - 12;
+      const middleLineY = 18 + pageHeight / 2 - 14;
+      const textRowHeight = (middleLineY - 18 - imageCellWidth) / 3;
+  
+      const addImage = (index, imagepath) => {
+        let image = nativeImage.createFromPath(imagepath);
+        let size = image.getSize();
+        const imageBuffer = image.toJPEG(100);
+        const base64Image = imageBuffer.toString('base64');
         
-        let tableData = [[null, null], [null, null], [null, null], [null, null], [null, null], [null, null], [null, null], [null, null]];
-        let goodIndex = i * 4;
-        doc.setTextColor("#000");
-        if(goods[goodIndex]) {
-          addImage(0, goods[goodIndex]['imagePath']);
-          addAlignCenterText(0, goods[goodIndex]);
-          goodIndex++;
+        let imageX = 11, imageY = 19;
+        switch(index) {
+          case 1:
+            imageX = pageWidth / 2 + 1;
+            break;
+          case 2:
+            imageY = middleLineY + 1;
+            break;
+          case 3:
+            imageX = pageWidth / 2 + 1;
+            imageY = middleLineY + 1;
+            break;
         }
-        if(goods[goodIndex]) {
-          addImage(1, goods[goodIndex]['imagePath']);
-          addAlignCenterText(1, goods[goodIndex]);
-          goodIndex++;
+        let imageWidth = imageCellWidth, imageHeight = imageCellWidth;
+        if(size.width > size.height) {
+          imageHeight = size.height * imageCellWidth / size.width;
+          imageY += (imageCellWidth - imageHeight) / 2;
+        } else {
+          imageWidth = size.width * imageCellWidth / size.height;
+          imageX += (imageCellWidth - imageWidth) / 2;
         }
-        if(goods[goodIndex]) {
-          addImage(2, goods[goodIndex]['imagePath']);
-          addAlignCenterText(2, goods[goodIndex]);
-          goodIndex++;
+        doc.addImage(base64Image, "JPEG", imageX, imageY, imageWidth, imageHeight);       
+      };
+  
+      const addAlignCenterText = (index, good) => {
+        const fontSize = 12;
+        doc.setFontSize(fontSize);
+        let x = 11 + imageCellWidth / 2;
+        let y = 19 + imageCellWidth + 7;
+        switch(index) {
+          case 0:
+            doc.text(good.num, x , y, { align: "center"});
+            doc.text(good.symbol, x, y + 15, { align: "center"});
+            doc.text(good.price, x, y + 30, { align: "center"});
+            break;
+          case 1:     
+            doc.text(good.num, x + imageCellWidth, y, { align: "center"});
+            doc.text(good.symbol, x + imageCellWidth , y + 15, { align: "center"});
+            doc.text(good.price, x + imageCellWidth, y + 30, { align: "center"});
+            break;
+          case 2:
+            y = middleLineY + imageCellWidth + 7;          
+            doc.text(good.num, x, y, { align: "center"});
+            doc.text(good.symbol, x , y + 15, { align: "center"});
+            doc.text(good.price, x, y + 30, { align: "center"});
+            break;
+          case 3:
+            y = middleLineY + imageCellWidth + 7;
+            doc.text(good.num, x + imageCellWidth, y, { align: "center"});
+            doc.text(good.symbol, x + imageCellWidth , y + 15, { align: "center"});
+            doc.text(good.price, x + imageCellWidth, y + 30, { align: "center"});
+            break;
+            
         }
-        if(goods[goodIndex]) {
-          addImage(3, goods[goodIndex]['imagePath']);
-          addAlignCenterText(3, goods[goodIndex]);
-          goodIndex++;
-        }
-        doc.addPage();
       }
-    });
-    doc.deletePage(doc.getNumberOfPages());
-    doc.save(`${offername}_${moment().format("YYYY_MM_DD_hh_mm_ss")}.pdf`);
+  
+      data.forEach((brandObj, index) => {
+        const { brand, goods } = brandObj;
+        const nGoods = goods.length;
+        const nPages = Math.ceil(nGoods / 4);
+        const createTime = moment().format("YYYY-MM-DD HH:mm");
+        for(let i = 0 ; i < nPages ; i++) {
+          doc.setFontSize(8);
+          doc.setTextColor("#888");
+          doc.text(offername, 10, 8);
+          doc.text(createTime, pageWidth - 10, 8, {align : "right"});
+          doc.setDrawColor("#888");
+          doc.line(10, 9, pageWidth - 10, 9);
+          // set brand every page
+          doc.setFontSize(18);
+          doc.setTextColor("#0000ff");
+          doc.text(brand, pageWidth / 2, 15, { align: 'center' });
+         
+          doc.rect(10, 18, pageWidth - 20, pageHeight - 28);
+          doc.line(pageWidth / 2, 18,  pageWidth / 2, pageHeight - 10);
+          doc.line(10, middleLineY, pageWidth - 10, middleLineY);
+  
+          doc.line(10, 18 + imageCellWidth, pageWidth - 10, 18 + imageCellWidth);
+          doc.line(10, 18 + imageCellWidth + textRowHeight * 1, pageWidth - 10, 18 + imageCellWidth + textRowHeight * 1);
+          doc.line(10, 18 + imageCellWidth + textRowHeight * 2, pageWidth - 10, 18 + imageCellWidth + textRowHeight * 2);
+  
+          doc.line(10, middleLineY + imageCellWidth, pageWidth - 10, middleLineY + imageCellWidth);
+          doc.line(10, middleLineY + imageCellWidth + textRowHeight * 1, pageWidth - 10, middleLineY + imageCellWidth + textRowHeight * 1);
+          doc.line(10, middleLineY + imageCellWidth + textRowHeight * 2, pageWidth - 10, middleLineY + imageCellWidth + textRowHeight * 2);
+          
+          let tableData = [[null, null], [null, null], [null, null], [null, null], [null, null], [null, null], [null, null], [null, null]];
+          let goodIndex = i * 4;
+          doc.setTextColor("#000");
+          if(goods[goodIndex]) {
+            addImage(0, goods[goodIndex]['imagePath']);
+            addAlignCenterText(0, goods[goodIndex]);
+            goodIndex++;
+          }
+          if(goods[goodIndex]) {
+            addImage(1, goods[goodIndex]['imagePath']);
+            addAlignCenterText(1, goods[goodIndex]);
+            goodIndex++;
+          }
+          if(goods[goodIndex]) {
+            addImage(2, goods[goodIndex]['imagePath']);
+            addAlignCenterText(2, goods[goodIndex]);
+            goodIndex++;
+          }
+          if(goods[goodIndex]) {
+            addImage(3, goods[goodIndex]['imagePath']);
+            addAlignCenterText(3, goods[goodIndex]);
+            goodIndex++;
+          }
+          doc.addPage();
+        }
+      });
+      doc.deletePage(doc.getNumberOfPages());
+      if(!filename.trim().length) filename = `${offername}_${moment().format("YYYY_MM_DD_hh_mm_ss")}.pdf`;
+      doc.save(filename);
+      result = true;
+    } catch (e) {
+      console.log(e);
+      result = false;
+    }
+    return result;
   };
 
   return {
