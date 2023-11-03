@@ -9,5 +9,8 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.on("file_names", (event, data) => {
       callback(data);
     });
+  },
+  saveDocFileName: (productInfo, fileName) => {
+    ipcRenderer.send('saveDocFileName', productInfo, fileName)
   }
 });

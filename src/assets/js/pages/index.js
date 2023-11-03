@@ -2,12 +2,17 @@ const inputNewBrandName = $('#new_brand_name');
 const btnCreateBrand = $('#btn_create_brand');
 const inputNewOfferName = $('#new_offer_name');
 const btnCreateOffer = $('#btn_create_offer');
+const inputNewDocName = $('#new_doc_name');
+const btnCreateDoc = $('#btn_create_doc');
+
+
 
 $(() => {
   "use strict";
 
   let selectedBrandName = "";
   let selectedOfferId = "";
+  let productOfferInfo = [];
 
   try {
     electron.loadFileNames(filenames => {
@@ -18,9 +23,9 @@ $(() => {
 
       console.log(selectedOfferId);
       const itemsContainer = $('#' + selectedOfferId + ' .content-items[data-brandname="' + selectedBrandName + '"] .row');
-      filenames.forEach(filename => {
+      filenames.forEach((filename, index) => {
         filename = filename.replaceAll("\\", "\/");
-        itemsContainer.append('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 item-block">\
+        itemsContainer.append('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 item-block" data-productNumber="' + selectedBrandName + index + '">\
                                 <div class="img-container" dataPath="">\
                                   <div class="img-overlay">\
                                     <span class="img-avatar">\
@@ -41,12 +46,8 @@ $(() => {
                                   <input type="text" class="form-control form-control-sm" name="price" placeholder="Ex: $ 23.4">\
                                 </div>\
                               </div>');
-<<<<<<< HEAD
         itemsContainer.find('.item-block:last .img-container').css('background-image', 'url(' + filename + ')');
         itemsContainer.find('.item-block:last .img-container').attr('dataPath', filename);
-=======
-        itemsContainer.find('.item-block:last .img-container').css('background-image', 'url(' + filename + ')').attr('data-imagepath', filename);
->>>>>>> aafd36460d55947abf7fea976cbfb26b82286976
       });
       itemsContainer.append('<div class="img-modal">\
                               <span class="img-close">&times;</span>\
@@ -72,7 +73,53 @@ $(() => {
         imgModal.hide();
       });
 
+      const getProductOfferInfo = () => {
+        productOfferInfo = [];
+      
 
+        $('.content-items').each(function(){
+          // Get the brand name from the data-brandname attribute
+          const brandName = $(this).data('brandname');
+          if(brandName !== undefined)
+          {
+            // Create an object to hold product data
+            const productInfo = [];
+
+            // Loop through each item block
+            $(this).find('.item-block').each(function() {
+              const productNumber = $(this).data('productnumber');
+              const imagePath = $(this).find('.img-container').attr('datapath');
+
+              const name = $(this).find('input[name="name"]').val();
+              const symbol = $(this).find('input[name="symbol"]').val();
+              const price = $(this).find('input[name="price"]').val();
+              
+              // Create itemData
+              const itemData = {
+                productNumber,
+                imagePath,
+                name,
+                symbol,
+                price
+              };
+
+              // Add the item data to the product number key in the productInfo object
+              productInfo.push(itemData);
+            });
+            const productAllInfo = [{[brandName] : productInfo}];
+            productOfferInfo.push(productAllInfo);
+          }
+          
+        });
+
+        console.log(productOfferInfo);
+      }
+
+      getProductOfferInfo();
+
+      $('.content-items input').change((e) => {
+        getProductOfferInfo();
+      });
       
     });
   } catch (e) {
@@ -122,6 +169,7 @@ $(() => {
                                       <strong>2.</strong> Create new brand.\
                                     </div>\
                                     <button class="btn btn-sm btn-primary me-1 btn-offer-save">Save this offer</button>\
+                                    <button class="btn btn-sm btn-warning me-1 btn-offer-doc" data-bs-toggle="modal" data-bs-target="#create-doc-file">Generate Doc</button>\
                                     <button class="btn btn-sm btn-danger me-1 btn-offer-pdf" data-bs-toggle="modal" data-bs-target="#create-pdf-preview">Generate PDF</button>\
                                     <button class="btn btn-sm btn-secondary btn-offer-close">Close</button>\
                                   </div>\
@@ -135,6 +183,12 @@ $(() => {
     $('button[data-bs-target="#create-new-brand"]').on("click", () => {
       setTimeout(() => {
         inputNewBrandName.focus();
+      }, 500)
+    });
+
+    $('button[data-bs-target="#create-doc-file"]').on('click', () => {
+      setTimeout(() => {
+        inputNewDocName.focus();
       }, 500)
     });
 
@@ -160,6 +214,11 @@ $(() => {
     btnCreateOffer.attr('disabled', value.length?false:true);
   });
 
+  inputNewDocName.on('input', (e) => {
+    let value = e.target.value;
+    btnCreateDoc.attr('disabled', value.length?false:true);
+  })
+
   inputNewBrandName.on("keypress", (e) => {
     const code = e.keyCode || e.charCode;
     if(code === 13 && e.target.value.length)  btnCreateBrand.click();
@@ -169,6 +228,11 @@ $(() => {
     const code = e.keyCode || e.charCode;
     if(code === 13 && e.target.value.length)  btnCreateOffer.click();
   });
+
+  inputNewDocName.on('keypress', (e) => {
+    const code = e.keyCode || e.charCode;
+    if(code === 13 && e.target.value.length) btnCreateDoc.click();
+  })
 
   btnCreateBrand.on("click", (e) => {
     // get new brand name and validate it
@@ -180,7 +244,6 @@ $(() => {
     inputNewBrandName.val('');
     btnCreateBrand.attr('disabled', true);
     $(e.target).parent().find('button[data-bs-dismiss]').click();
-    console.log('ok');
   });
 
   btnCreateOffer.on("click", (e) => {
@@ -194,6 +257,16 @@ $(() => {
     btnCreateOffer.attr('disabled', true);
     $(e.target).parent().find('button[data-bs-dismiss]').click();
   });
+
+  btnCreateDoc.on('click', (e) => {
+    let newDocName = inputNewDocName.val();
+    if(!newDocName.length) return;
+
+    inputNewDocName.val('');
+    btnCreateDoc.attr('disabled', true);
+    $(e.target).parent().find('button[data-bs-dismiss]').click();
+    window.electron.saveDocFileName(productOfferInfo, newDocName);
+  })
   
   $('button[data-bs-target="#create-new-offer"]').on("click", () => {
     setTimeout(() => {
@@ -201,12 +274,12 @@ $(() => {
     }, 500)
   });
 
-<<<<<<< HEAD
   
 
-=======
- 
->>>>>>> aafd36460d55947abf7fea976cbfb26b82286976
+  
+
+  
+
 
   // init functions
   createOfferContainer("My new offer");

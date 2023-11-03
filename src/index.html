@@ -70,6 +70,26 @@
         </div>
       </div>
     </div>
+    <div class="modal fade" id="create-doc-file">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Create New Doc</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="">Please input doc file name:</label>
+              <input type="text" class="form-control" id="new_doc_name">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="btn_create_doc" disabled>Save</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="modal fade" id="create-pdf-preview">
       <div class="modal-dialog modal-fullscreen modal-dialog-scrollable">
         <div class="modal-content">
@@ -84,6 +104,7 @@
           </div> 
           <!-- Modal footer -->
           <div class="modal-footer">
+            
             <button type="button" class="btn btn-danger" disabled>Generate PDF</button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
