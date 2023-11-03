@@ -21,7 +21,12 @@ $(() => {
       filenames.forEach(filename => {
         filename = filename.replaceAll("\\", "\/");
         itemsContainer.append('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 item-block">\
-                                <div class="img-container">\
+                                <div class="img-container" dataPath="">\
+                                  <div class="img-overlay">\
+                                    <span class="img-avatar">\
+                                      <i class="fa fa-plus-circle avatar-plus"></i>\
+                                    </span>\
+                                  </div>\
                                 </div>\
                                 <div class="form-group">\
                                   <label for="">* Name:</label>\
@@ -38,6 +43,32 @@ $(() => {
                               </div>');
         itemsContainer.find('.item-block:last .img-container').css('background-image', 'url(' + filename + ')').attr('data-imagepath', filename);
       });
+      itemsContainer.append('<div class="img-modal">\
+                              <span class="img-close">&times;</span>\
+                              <img class="img-bigShow"/>\
+                              </div>\
+                            </div>');
+
+      const imgContainer = $('.img-container');
+      const imgAvatar = $('.img-avatar');
+      const imgModal = $('.img-modal');
+      const imgBigShow = $('.img-bigShow');
+      const imgClose = $('.img-close');
+
+      imgAvatar.click((e) => {
+        const imagePath = $(e.target.parentNode.parentNode.parentNode).attr('dataPath');
+        imgBigShow.attr("src", imagePath);
+        imgModal.show();
+      });
+
+      
+
+      imgClose.click(() => {
+        imgModal.hide();
+      });
+
+
+      
     });
   } catch (e) {
     console.log(e);
@@ -144,6 +175,7 @@ $(() => {
     inputNewBrandName.val('');
     btnCreateBrand.attr('disabled', true);
     $(e.target).parent().find('button[data-bs-dismiss]').click();
+    console.log('ok');
   });
 
   btnCreateOffer.on("click", (e) => {
@@ -164,10 +196,7 @@ $(() => {
     }, 500)
   });
 
- 
-
   // init functions
   createOfferContainer("My new offer");
-
 
 });
