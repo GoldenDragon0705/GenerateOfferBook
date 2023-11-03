@@ -1,11 +1,13 @@
 {
   "name": "genofferbook",
-  "version": "1.0.0",
+  "productName": "Offerbook 2",
+  "version": "2.0.0",
   "description": "Generate offer books for marketing",
   "main": "index.js",
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder"
+    "dist": "electron-builder",
+    "dist32": "electron-builder --ia32"
   },
   "keywords": [
     "electron",
@@ -22,18 +24,20 @@
     "docx": "^8.2.4",
     "docxtemplater": "^3.40.2",
     "docxtemplater-image-module": "^3.1.0",
+    "font-awesome": "^4.7.0",
     "html-to-image": "^1.11.11",
+    "jquery": "^3.7.1",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.7.1",
     "moment": "^2.29.4",
+    "pizzip": "^3.1.4",
     "sharp": "^0.32.6",
     "xmldom": "^0.6.0",
-    "font-awesome": "^4.7.0",
-    "jquery": "^3.7.1",
-    "pizzip": "^3.1.4"
+    "yargs": "^17.7.2"
   },
   "build": {
     "appId": "genofferbook",
+    "icon": "./src/assets/images/icons8-google-books-gradient-310.png",
     "win": {
       "target": "nsis"
     }
