@@ -21,8 +21,11 @@ $(() => {
 
       if(!filenames.length) return;
       const itemsContainer = $('#' + selectedOfferId + ' .content-items[data-brandname="' + selectedBrandName + '"] .row');
+      const brandIndex = $('[data-brandname="' + selectedBrandName + '"]').attr('data-brandIndex');
+      const startIndex = itemsContainer.find('.item-block').length + 1;
       filenames.forEach((filename, index) => {
         filename = filename.replaceAll("\\", "\/");
+        index += startIndex;
         const productNumber = selectedBrandName + "_" + index;
         itemsContainer.append('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 item-block" id="' + productNumber + '" draggable="true">\
                                 <div class="img-container">\
@@ -34,7 +37,7 @@ $(() => {
                                 </div>\
                                 <div class="form-group mt-1">\
                                   <label for="" hidden>* Num:</label>\
-                                  <input type="text" class="form-control form-control-sm" name="num" placeholder="Ex: 24-1">\
+                                  <input type="text" class="form-control form-control-sm" name="num" placeholder="Ex: 24-1" value="' + brandIndex + "-" + index + '">\
                                 </div>\
                                 <div class="form-group mt-1">\
                                   <label for="" hidden>Symbol:</label>\
@@ -141,11 +144,14 @@ $(() => {
 
   const createBrandContainer = (brandName) => {
     const activeOfferId = $('#offer-contents .tab-pane.active').attr('id');
-    $('#' + activeOfferId + ' .content-items:last').before('<div class="content-items container-fluid" data-brandname="' + brandName + '">\
+    const brandIndex = $('#' + activeOfferId + ' [data-brandname]').length + 1;
+    $('#' + activeOfferId + ' .content-items:last').before('<div class="content-items container-fluid" data-brandname="' + brandName + '" data-brandIndex="' + brandIndex + '">\
                                       <div>\
                                         <input type="text" class="brand-name text-center" value="' + brandName + '">\
                                       </div>\
                                       <div class="row">\
+                                      </div>\
+                                      <div class="d-flex justify-content-center my-3">\
                                       </div>\
                                       <div class="d-flex justify-content-center my-3">\
                                         <button type="button" class="btn btn-primary btn_load_images">Import new images to this brand.</button>\
@@ -189,7 +195,7 @@ $(() => {
                                   </div>\
                                   <div class="content-items container-fluid">\
                                     <div class="d-flex justify-content-center">\
-                                      <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#create-new-brand">Create new brand</button>\
+                                      <button class="w3-button w3-round-xxlarge w3-teal" data-bs-toggle="modal" data-bs-target="#create-new-brand">Create new brand</button>\
                                     </div>\
                                   </div>\
                                 </div>');
