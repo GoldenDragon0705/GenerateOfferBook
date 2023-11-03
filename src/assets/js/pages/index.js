@@ -80,35 +80,28 @@ $(() => {
 
         $('.content-items').each(function(){
           // Get the brand name from the data-brandname attribute
-          const brandName = $(this).data('brandname');
-          if(brandName !== undefined)
+          const brand = $(this).data('brandname');
+          if(brand !== undefined)
           {
             // Create an object to hold product data
             const productInfo = [];
+            let goods = [];
 
             // Loop through each item block
             $(this).find('.item-block').each(function() {
               const productNumber = $(this).data('productnumber');
               const imagePath = $(this).find('.img-container').attr('datapath');
 
-              const name = $(this).find('input[name="num"]').val();
+              const num = $(this).find('input[name="num"]').val();
               const symbol = $(this).find('input[name="symbol"]').val();
               const price = $(this).find('input[name="price"]').val();
               
               // Create itemData
-              const itemData = {
-                productNumber,
-                imagePath,
-                name,
-                symbol,
-                price
-              };
+              goods.push({productNumber, imagePath, num, symbol, price})
 
               // Add the item data to the product number key in the productInfo object
-              productInfo.push(itemData);
             });
-            const productAllInfo = [{[brandName] : productInfo}];
-            productOfferInfo.push(productAllInfo);
+            productOfferInfo.push({brand, goods});
           }
           
         });
