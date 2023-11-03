@@ -35,7 +35,7 @@ $(() => {
                                 </div>\
                                 <div class="form-group">\
                                   <label for="">* Name:</label>\
-                                  <input type="text" class="form-control form-control-sm" name="name" placeholder="Ex: Short Shirt">\
+                                  <input type="text" class="form-control form-control-sm" name="num" placeholder="Ex: Short Shirt">\
                                 </div>\
                                 <div class="form-group">\
                                   <label for="">Symbol:</label>\
@@ -46,8 +46,12 @@ $(() => {
                                   <input type="text" class="form-control form-control-sm" name="price" placeholder="Ex: $ 23.4">\
                                 </div>\
                               </div>');
+<<<<<<< HEAD
         itemsContainer.find('.item-block:last .img-container').css('background-image', 'url(' + filename + ')');
         itemsContainer.find('.item-block:last .img-container').attr('dataPath', filename);
+=======
+        itemsContainer.find('.item-block:last .img-container').css('background-image', 'url(' + filename + ')').attr('data-imagepath', filename);
+>>>>>>> 989227b60fd5f9c5f38b03c479f9c9303b83385e
       });
       itemsContainer.append('<div class="img-modal">\
                               <span class="img-close">&times;</span>\
@@ -274,6 +278,7 @@ $(() => {
     }, 500)
   });
 
+<<<<<<< HEAD
   
 
   
@@ -281,8 +286,9 @@ $(() => {
   
 
 
+=======
+>>>>>>> 989227b60fd5f9c5f38b03c479f9c9303b83385e
   // init functions
   createOfferContainer("My new offer");
-
 
 });
