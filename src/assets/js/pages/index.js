@@ -91,7 +91,7 @@ $(() => {
               const productNumber = $(this).data('productnumber');
               const imagePath = $(this).find('.img-container').attr('datapath');
 
-              const name = $(this).find('input[name="name"]').val();
+              const name = $(this).find('input[name="num"]').val();
               const symbol = $(this).find('input[name="symbol"]').val();
               const price = $(this).find('input[name="price"]').val();
               

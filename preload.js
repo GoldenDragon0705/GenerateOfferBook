@@ -10,12 +10,10 @@ contextBridge.exposeInMainWorld('electron', {
       callback(data);
     });
   },
-<<<<<<< HEAD
   saveDocFileName: (productInfo, fileName) => {
     ipcRenderer.send('saveDocFileName', productInfo, fileName)
-=======
+  },
   pdf: (config) => {
     return ipcRenderer.invoke('pdf', config);
->>>>>>> 989227b60fd5f9c5f38b03c479f9c9303b83385e
   }
 });
