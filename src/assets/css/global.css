@@ -64,6 +64,10 @@ body {
   background-color: black;
 }
 
+.img-overlay:hover {
+  cursor: pointer;
+}
+
 .img-container:hover .img-overlay {
   opacity: 0.7;
 }

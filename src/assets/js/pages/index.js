@@ -20,55 +20,73 @@ $(() => {
       if(!selectedBrandName || !selectedBrandName.length) return;
 
       if(!filenames.length) return;
-
-      console.log(selectedOfferId);
       const itemsContainer = $('#' + selectedOfferId + ' .content-items[data-brandname="' + selectedBrandName + '"] .row');
       filenames.forEach((filename, index) => {
         filename = filename.replaceAll("\\", "\/");
-        itemsContainer.append('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 item-block" data-productNumber="' + selectedBrandName + index + '">\
-                                <div class="img-container" dataPath="">\
+        const productNumber = selectedBrandName + "_" + index;
+        itemsContainer.append('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 item-block" id="' + productNumber + '" draggable="true">\
+                                <div class="img-container">\
                                   <div class="img-overlay">\
                                     <span class="img-avatar">\
                                       <i class="fa fa-plus-circle avatar-plus"></i>\
                                     </span>\
                                   </div>\
                                 </div>\
-                                <div class="form-group">\
-                                  <label for="">* Name:</label>\
-                                  <input type="text" class="form-control form-control-sm" name="num" placeholder="Ex: Short Shirt">\
+                                <div class="form-group mt-1">\
+                                  <label for="" hidden>* Num:</label>\
+                                  <input type="text" class="form-control form-control-sm" name="num" placeholder="Ex: 24-1">\
                                 </div>\
-                                <div class="form-group">\
-                                  <label for="">Symbol:</label>\
+                                <div class="form-group mt-1">\
+                                  <label for="" hidden>Symbol:</label>\
                                   <input type="text" class="form-control form-control-sm" name="symbol" placeholder="Ex: M, L, XL, 2XL">\
                                 </div>\
-                                <div class="form-group">\
-                                  <label for="">* Price:</label>\
+                                <div class="form-group mt-1">\
+                                  <label for="" hidden>* Price:</label>\
                                   <input type="text" class="form-control form-control-sm" name="price" placeholder="Ex: $ 23.4">\
                                 </div>\
                               </div>');
-        itemsContainer.find('.item-block:last .img-container').css('background-image', 'url(' + filename + ')');
-        itemsContainer.find('.item-block:last .img-container').attr('dataPath', filename);
+         
         itemsContainer.find('.item-block:last .img-container').css('background-image', 'url(' + filename + ')').attr('data-imagepath', filename);
-      });
-      itemsContainer.append('<div class="img-modal">\
-                              <span class="img-close">&times;</span>\
-                              <img class="img-bigShow"/>\
-                              </div>\
-                            </div>');
+        const thisNode = document.getElementById(productNumber);
 
-      const imgContainer = $('.img-container');
+        thisNode.addEventListener("drop", function(e) {
+          e.preventDefault();
+          var id = e.dataTransfer.getData("id");
+          $('#' + productNumber).before($('#' + id));
+          $('.good-dragover').removeClass("good-dragover");
+        });
+
+        thisNode.addEventListener("dragover", function(e) {          
+          e.preventDefault();
+          $(thisNode).addClass("good-dragover");
+        });
+
+        thisNode.addEventListener("dragleave", function(e) {          
+          e.preventDefault();
+          $('.good-dragover').removeClass("good-dragover");
+        });
+
+        thisNode.addEventListener("dragend", function(e) {          
+          e.preventDefault();
+          $('.good-dragover').removeClass("good-dragover");
+        });
+
+        thisNode.addEventListener("dragstart", function(e) {
+          e.dataTransfer.setData("id", productNumber);
+        });
+
+      });
+
       const imgAvatar = $('.img-avatar');
       const imgModal = $('.img-modal');
       const imgBigShow = $('.img-bigShow');
       const imgClose = $('.img-close');
 
       imgAvatar.click((e) => {
-        const imagePath = $(e.target.parentNode.parentNode.parentNode).attr('dataPath');
+        const imagePath = $(e.target.parentNode.parentNode.parentNode).attr('data-imagepath');
         imgBigShow.attr("src", imagePath);
         imgModal.show();
       });
-
-      
 
       imgClose.click(() => {
         imgModal.hide();
@@ -90,7 +108,7 @@ $(() => {
             // Loop through each item block
             $(this).find('.item-block').each(function() {
               const productNumber = $(this).data('productnumber');
-              const imagePath = $(this).find('.img-container').attr('datapath');
+              const imagePath = $(this).find('.img-container').attr('data-imagepath');
 
               const num = $(this).find('input[name="num"]').val();
               const symbol = $(this).find('input[name="symbol"]').val();
@@ -106,7 +124,6 @@ $(() => {
           
         });
 
-        console.log(productOfferInfo);
       }
 
       getProductOfferInfo();
@@ -167,7 +184,7 @@ $(() => {
                                     </div>\
                                     <button class="btn btn-sm btn-primary me-1 btn-offer-doc" data-bs-toggle="modal" data-bs-target="#create-doc-file"><i class="fa fa-file-word-o"></i> Generate Docx</button>\
                                     <button class="btn btn-sm btn-danger me-1 btn-offer-pdf"><i class="fa fa-file-pdf-o"></i> Generate PDF</button>\
-                                    <button class="btn btn-sm btn-success me-1 btn-offer-save">Save this offer</button>\
+                                    <button class="btn btn-sm btn-success me-1 btn-offer-save"><i class="fa fa-save"></i> Save this offer</button>\
                                     <button class="btn btn-sm btn-secondary btn-offer-close">Close</button>\
                                   </div>\
                                   <div class="content-items container-fluid">\
