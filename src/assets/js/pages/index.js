@@ -108,7 +108,7 @@ $(() => {
   const createOfferContainer = (newOfferName) => {
     const id = Date.now();
     $('#offer-tabs').append('<li class="nav-item">\
-                              <a class="nav-link" data-bs-toggle="tab" href="#' + id + '">' + newOfferName + ' *</a>\
+                              <a class="nav-link" data-bs-toggle="tab" href="#' + id + '" data-offername="' + newOfferName + '">' + newOfferName + ' *</a>\
                             </li>');
 
     $('#offer-contents').append('<div class="tab-pane container-fluid" id="' + id + '" role="tabpanel">\
@@ -117,7 +117,7 @@ $(() => {
                                       <strong>2.</strong> Create new brand.\
                                     </div>\
                                     <button class="btn btn-sm btn-primary me-1 btn-offer-save">Save this offer</button>\
-                                    <button class="btn btn-sm btn-danger me-1 btn-offer-pdf" data-bs-toggle="modal" data-bs-target="#create-pdf-preview">Generate PDF</button>\
+                                    <button class="btn btn-sm btn-danger me-1 btn-offer-pdf">Generate PDF</button>\
                                     <button class="btn btn-sm btn-secondary btn-offer-close">Close</button>\
                                   </div>\
                                   <div class="content-items container-fluid">\
@@ -133,8 +133,8 @@ $(() => {
       }, 500)
     });
 
-    $('button[data-bs-target="#create-pdf-preview"]').on("click", () => {
-      PDFUtil().preview(id);
+    $('#' + id + ' button.btn-offer-pdf').on("click", () => {
+      PDFUtil().generate(id);
     });
 
     // open this offer by default

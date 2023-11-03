@@ -33,6 +33,13 @@ function createWindow() {
     const { offername, data } = params;
     PdfModule.generate(offername, data);
   });
+
+  ipcMain.handle('save_dialog', (e, config, params) => {
+    const filename = dialog.showSaveDialogSync(config);
+    const { offername, offerdata } = params;
+    const pdfResult = PdfModule.generate(offername, offerdata, filename);
+    e.sender.send("generate_pdf", pdfResult);
+  });
 }
 
 const menutemplate = [

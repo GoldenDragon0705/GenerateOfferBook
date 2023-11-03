@@ -9,7 +9,7 @@ const PdfModule = () => {
 
  
 
-  const generate = (offername = "Unknown", data = []) => {
+  const generate = (offername = "Unknown", data = [] , filename) => {
     if(!offername) offername = "Unknown";
     const doc = new jsPDF({
       orientation: 'p',
@@ -143,7 +143,8 @@ const PdfModule = () => {
       }
     });
     doc.deletePage(doc.getNumberOfPages());
-    doc.save(`${offername}_${moment().format("YYYY_MM_DD_hh_mm_ss")}.pdf`);
+    if(!filename.trim().length) filename = `${offername}_${moment().format("YYYY_MM_DD_hh_mm_ss")}.pdf`;
+    doc.save(filename);
   };
 
   return {
