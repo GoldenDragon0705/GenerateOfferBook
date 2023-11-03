@@ -1,6 +1,9 @@
 const { app, BrowserWindow, Menu, ipcMain, dialog, session } = require('electron')
 const url = require('url')
 const path = require('path')
+
+
+const DocxModule = require('./modules/docx.module');
 const PdfModule = require('./modules/pdf.module');
 
 let win
@@ -18,11 +21,20 @@ function createWindow() {
     }   
   })
 
+  ipcMain.on('saveDocFileName', (event, productInfo, fileName) => {
+    const webContents = event.sender
+    DocxModule.generateDocx(productInfo, fileName);
+  })
+
+  
+
   win.loadURL(url.format({
     pathname: path.join(__dirname, 'src/index.html'),
     protocol: 'file:',
     slashes: true
   }))
+
+  
 
   ipcMain.handle('dialog', (event, method, params) => {       
     const filenames = dialog[method](win ,params) || [];

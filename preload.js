@@ -13,6 +13,9 @@ contextBridge.exposeInMainWorld('electron', {
       callback(data);
     });
   },
+  saveDocFileName: (productInfo, fileName) => {
+    ipcRenderer.send('saveDocFileName', productInfo, fileName)
+  },
   pdf: (config) => {
     return ipcRenderer.invoke('pdf', config);
   }

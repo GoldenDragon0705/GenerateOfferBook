@@ -19,6 +19,9 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.2",
+    "docx": "^8.2.4",
+    "docxtemplater": "^3.40.2",
+    "docxtemplater-image-module": "^3.1.0",
     "html-to-image": "^1.11.11",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.7.1",
@@ -26,7 +29,8 @@
     "sharp": "^0.32.6",
     "xmldom": "^0.6.0",
     "font-awesome": "^4.7.0",
-    "jquery": "^3.7.1"
+    "jquery": "^3.7.1",
+    "pizzip": "^3.1.4"
   },
   "build": {
     "appId": "genofferbook",
