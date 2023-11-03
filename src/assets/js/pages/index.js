@@ -27,9 +27,9 @@ $(() => {
         filename = filename.replaceAll("\\", "\/");
         index += startIndex;
         const productNumber = selectedBrandName + "_" + index;
-        itemsContainer.append('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 item-block" id="' + productNumber + '" draggable="true">\
+        itemsContainer.append('<div class="col-lg-2 col-md-3 col-sm-4 col-xs-6 item-block" id="' + productNumber + '">\
                                 <div class="img-container">\
-                                  <div class="img-overlay">\
+                                  <div class="img-overlay" draggable="true">\
                                     <span class="img-avatar">\
                                       <i class="fa fa-plus-circle avatar-plus"></i>\
                                     </span>\
@@ -50,18 +50,22 @@ $(() => {
                               </div>');
          
         itemsContainer.find('.item-block:last .img-container').css('background-image', 'url(' + filename + ')').attr('data-imagepath', filename);
-        const thisNode = document.getElementById(productNumber);
+        const thisNode = document.querySelector('#' + productNumber + ' .img-overlay');
 
         thisNode.addEventListener("drop", function(e) {
           e.preventDefault();
           var id = e.dataTransfer.getData("id");
           $('#' + productNumber).before($('#' + id));
           $('.good-dragover').removeClass("good-dragover");
+          itemsContainer.find('.item-block').each(function(index) {
+            index++;
+            $(this).find('input[name="num"]').val(brandIndex + "-" + index);
+          });
         });
 
         thisNode.addEventListener("dragover", function(e) {          
           e.preventDefault();
-          $(thisNode).addClass("good-dragover");
+          $('#' + productNumber).addClass("good-dragover");
         });
 
         thisNode.addEventListener("dragleave", function(e) {          
@@ -221,6 +225,8 @@ $(() => {
 
     $('#offer-contents div.tab-pane.active').removeClass("active");
     $('#' + id + '').addClass("active");
+
+    selectedOfferId = id;
   };
   
   inputNewBrandName.on('input', (e) => {
@@ -257,6 +263,16 @@ $(() => {
     // get new brand name and validate it
     let newBrandName = inputNewBrandName.val();
     if(!newBrandName.length) return;
+
+    if($('#' + selectedOfferId + ' [data-brandName="' + newBrandName + '"]').length) {
+      $.toast({
+        heading: 'Error',
+        text: 'This brand is already created.',
+        icon: 'error',
+        position: 'top-right',
+      });
+      return ;
+    }
 
     createBrandContainer(newBrandName);
     // delete value of new brand name input and close this dialog
