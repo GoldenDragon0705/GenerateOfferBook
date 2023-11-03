@@ -9,5 +9,8 @@ contextBridge.exposeInMainWorld('electron', {
     ipcRenderer.on("file_names", (event, data) => {
       callback(data);
     });
+  },
+  pdf: (config) => {
+    return ipcRenderer.invoke('pdf', config);
   }
 });

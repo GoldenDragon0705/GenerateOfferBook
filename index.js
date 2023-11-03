@@ -1,7 +1,7 @@
 const { app, BrowserWindow, Menu, ipcMain, dialog, session } = require('electron')
 const url = require('url')
 const path = require('path')
-
+const PdfModule = require('./modules/pdf.module');
 
 let win
 
@@ -27,6 +27,11 @@ function createWindow() {
   ipcMain.handle('dialog', (event, method, params) => {       
     const filenames = dialog[method](win ,params) || [];
     event.sender.send("file_names", filenames);
+  });
+
+  ipcMain.handle('pdf', (event, params) => {
+    const { offername, data } = params;
+    PdfModule.generate(offername, data);
   });
 }
 

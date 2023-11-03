@@ -79,7 +79,86 @@
           </div>
           <!-- Modal body -->
           <div class="modal-body">
-            
+            <div class="pdf-page">
+              <style>
+                              
+              .pdf-page {
+                padding: 15px;
+                border-radius: 3px;
+                width: calc(60vw);
+                height: calc(84vw);
+                background-color: white;
+                margin-bottom: 25px;
+                margin-left: auto;
+                margin-right: auto;
+              }
+
+              .pdf-page table {
+                width: 100%;
+                height: calc(100% - 130px);
+                font-size: 18px;
+                font-weight: bold;
+              }
+
+              .pdf-page table, .pdf-page table td {
+                border-collapse: collapse;
+                border: 2px solid #ddd;
+                text-align: center;
+              }
+              </style>
+              <div class="border-bottom border-2 d-flex">
+                <span class="text-secondary me-auto">New Offer</span>
+                <span class="text-secondary">2023.10.24 12:20 PM</span>
+              </div>
+              <h2 class="text-center text-primary">Gucci</h2>
+              <table>
+                <tbody>
+                  <tr>
+                    <td>
+                      <img src="C:/Users/111/Pictures/items/61VeA-UsG0L.__AC_SY300_SX300_QL70_FMwebp_.jpg" width="100%">
+                    </td>
+                    <td>
+                      <img src="C:/Users/111/Pictures/items/71aX1gxLgrS._AC_UL480_FMwebp_QL65_.jpg" width="100%">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Addidas</td>
+                    <td>Addidas</td>
+                  </tr>
+                  <tr>
+                    <td>Black</td>
+                    <td>White</td>
+                  </tr>
+                  <tr>
+                    <td>20 $</td>
+                    <td>20 $</td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <img src="C:/Users/111/Pictures/items/91TnbO11-bS._AC_UL480_FMwebp_QL65_.jpg" width="100%">
+                    </td>
+                    <td>
+                      <img src="C:/Users/111/Pictures/items/download.jpg" width="100%">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Addidas</td>
+                    <td>Addidas</td>
+                  </tr>
+                  <tr>
+                    <td>Black</td>
+                    <td>White</td>
+                  </tr>
+                  <tr>
+                    <td>20 $</td>
+                    <td>20 $</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div>
+                <span>Page 1 of 15</span>
+              </div>
+            </div>
           </div> 
           <!-- Modal footer -->
           <div class="modal-footer">
@@ -92,6 +171,7 @@
   </body>
   <script src="../node_modules/jquery/dist/jquery.min.js"></script>
   <script src="../node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="../node_modules/jspdf/dist/jspdf.umd.min.js"></script>
   <script src="assets/js/pages/pdfutil.js"></script>
   <script src="assets/js/pages/index.js"></script>
 </html>

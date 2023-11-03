@@ -25,7 +25,7 @@ $(() => {
                                 </div>\
                                 <div class="form-group">\
                                   <label for="">* Name:</label>\
-                                  <input type="text" class="form-control form-control-sm" name="name" placeholder="Ex: Short Shirt">\
+                                  <input type="text" class="form-control form-control-sm" name="num" placeholder="Ex: Short Shirt">\
                                 </div>\
                                 <div class="form-group">\
                                   <label for="">Symbol:</label>\
