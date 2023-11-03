@@ -1,6 +1,7 @@
 const fs = require('fs')
-const { Document, Packer, Paragraph, TextRun, ImageRun, Table, TableCell, TableRow, WidthType, Media, TableOfContents, File, StyleLevel, HeadingLevel, SectionType, HeightRule, ImageFit, TableRowHeight, VerticalAlign } =  require('docx')
+const { Document, Packer, Paragraph, TextRun, ImageRun, Table, TableCell, TableRow, WidthType, Media, TableOfContents, File, StyleLevel, HeadingLevel, SectionType, HeightRule, ImageFit, TableRowHeight, VerticalAlign, PageBreak } =  require('docx')
 const { nativeImage } = require('electron')
+const yargs = require('yargs')
 
 const DocxModule = () => {
     const defaultImageCellWidth = 4500
@@ -10,42 +11,61 @@ const DocxModule = () => {
 
     const generateDocx = (productInfo, fileName) => {
 
-        let alltables = [];
-        productInfo.forEach(byBrand => {
-        byBrand.forEach(oneProductInfo => {
-            const keys = Object.keys(oneProductInfo)
-            if(keys.length > 0){
-            const brandName = keys[0];
-            const products = oneProductInfo[brandName];
-            products.forEach(individualProductInfo => {
-                let table = getProductContent(individualProductInfo)
-    
-                alltables.push(table)
-            })
+        let allTables = [];
+        let tempTables = [];
+        let resultProducts = [];
+        let temp = []
+        let showResult = []
+
+        productInfo.forEach((brandObj, index) => {
+            const { brand, goods } = brandObj
+            const nGoods = goods.length
+
+            
+
+            for(let i = 0;i < nGoods;i++){
+                let table = getProductContent(goods[i])
+                tempTables.push(table)
             }
+
+            allTables.push({brand, tempTables})
+            tempTables = []
         })
-        });
-    
-    
-        const data = alltables.reduce((acc, val, i) => {
-            if (i % 2 === 0) {
-                acc.push([]);
-            }
-            acc[acc.length - 1].push(val);
-            return acc;
-        }, []);
-    
-        const result = {
-            rows: data.map(rowData => (
-                new TableRow({
-                children: rowData.map(cellData => (
-                    new TableCell({
-                    children: [cellData],
+        
+        allTables.forEach((byBrandObject, index) => {
+            const { brand, tempTables } = byBrandObject
+            const data = tempTables.reduce((acc, val, i) => {
+                if (i % 2 === 0) {
+                    acc.push([]);
+                }
+                acc[acc.length - 1].push(val);
+                return acc;
+            }, []);
+            const result = {
+                rows: data.map(rowData => (
+                    new TableRow({
+                    children: rowData.map(cellData => (
+                        new TableCell({
+                            children: [cellData],
+                        })
+                    )),
                     })
                 )),
-                })
-            )),
-        };
+            };
+            showResult = [
+                new Paragraph({ text : brand}),
+                new Table(result),
+            ];
+            resultProducts.push(new Paragraph({ text : brand}))
+            resultProducts.push(new Table(result))
+        })
+        
+        
+
+    
+        
+
+        
     
         const doc = new Document({
             sections: [
@@ -53,12 +73,7 @@ const DocxModule = () => {
                 properties: {
                     type: SectionType.NEXT_COLUMN
                 },
-                children: [
-                    new Paragraph({ text: "Brand Name" }),
-                    new Table(
-                        result
-                    )
-                ],
+                children: showResult
                 },
             ],
         });
@@ -90,8 +105,6 @@ const DocxModule = () => {
     if(realImageWidth > fillWidth) realImageWidth = fillWidth
     if(realImageHeight > fillHeight) realImageHeight = fillHeight
 
-  
-    console.log(individualProductInfo)
   
     let image = new ImageRun({
       data: fs.readFileSync(individualProductInfo.imagePath),
@@ -132,7 +145,7 @@ const DocxModule = () => {
                     },
                     children: [new Paragraph({
                         alignment: 'center',
-                        text: individualProductInfo.name
+                        text: individualProductInfo.num
                     })],
                 }),
             ],
@@ -166,7 +179,8 @@ const DocxModule = () => {
                   },
                   children: [new Paragraph({
                     alignment: 'center',
-                    text : individualProductInfo.price
+                    text : individualProductInfo.price,
+                    
                   })],
               }),
           ],

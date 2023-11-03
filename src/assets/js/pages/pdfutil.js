@@ -31,6 +31,7 @@ const PDFUtil = () => {
     // offerdata = sampleOfferData;
    
     generatePdf("", offerdata);
+    console.log(offerdata);
   };
 
   const generatePdf = (offername, data) => {
