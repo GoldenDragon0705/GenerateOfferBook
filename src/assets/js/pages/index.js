@@ -170,7 +170,7 @@ $(() => {
                                       <strong>2.</strong> Create new brand.\
                                     </div>\
                                     <button class="btn btn-sm btn-primary me-1 btn-offer-save">Save this offer</button>\
-                                    <button class="btn btn-sm btn-danger me-1 btn-offer-pdf">Generate PDF</button>\
+                                    <button class="btn btn-sm btn-warning me-1 btn-offer-doc" data-bs-toggle="modal" data-bs-target="#create-doc-file">Generate Doc</button>\
                                     <button class="btn btn-sm btn-danger me-1 btn-offer-pdf">Generate PDF</button>\
                                     <button class="btn btn-sm btn-secondary btn-offer-close">Close</button>\
                                   </div>\
@@ -190,7 +190,7 @@ $(() => {
     $('#' + id + ' button.btn-offer-pdf').on("click", () => {
       PDFUtil().generate(id);
     });
-
+    
     $('button[data-bs-target="#create-doc-file"]').on('click', () => {
       setTimeout(() => {
         inputNewDocName.focus();
